@@ -20,8 +20,11 @@ class JokeSelector():
             'explicit': False,
         }
 
-        self.amount_of_jokes = 1
-    
+        self.base_url = 'https://v2.jokeapi.dev/joke/'
+        self.default_url = 'https://v2.jokeapi.dev/joke/Any' 
+
+        self.verbose_mode = True
+
     def main_menu(self):
         while True:
             print('\n- Joke Generator Main Menu -\n')
@@ -84,7 +87,20 @@ class JokeSelector():
                 print('Invalid input.')
 
     def get_joke(self):
-        pass
+        joke_raw = self.generate_request()
+        joke_json = joke_raw.json()
+
+        if self.verbose_mode:
+            print(f'\nCategory: {joke_json["category"]} - Type: {joke_json["type"]} - '
+                  + f'ID: {joke_json["id"]}')
+            flags = [flag for flag in joke_json["flags"] if joke_json["flags"][flag] is True]
+            print(f'Blacklist flags: {flags}')
+
+        if joke_json['type'] == 'single':
+            print('\n' + joke_json['joke'])
+        elif joke_json['type'] == 'twopart':
+            print('\n' + joke_json['setup'])
+            print(joke_json['delivery'])
 
     def set_all_categories(self):
         for key in self.categories.keys():
@@ -103,8 +119,23 @@ class JokeSelector():
             self.blacklist_flags[key] = False
     
     def generate_request(self):
-        pass
+        enabled_categories = [category for category in self.categories.keys() if self.categories[category] == True]
+        enabled_blacklist_flags = [category for category in self.blacklist_flags.keys() if self.blacklist_flags[category] == True]
 
+        categories_string = ','.join(enabled_categories)
+        blacklist_flags_string = ','.join(enabled_blacklist_flags)
+
+        if len(enabled_categories) == 0 and len(enabled_blacklist_flags) == 0:
+            response = requests.get(self.default_url)
+        elif len(enabled_categories) == 0:
+            request_url = self.default_url + '?blacklistFlags=' + blacklist_flags_string
+            response = requests.get(request_url)
+        else:
+            request_url = self.base_url + categories_string + '?blacklistFlags=' + blacklist_flags_string
+            response = requests.get(request_url)
+
+        return response
+    
 if __name__ == '__main__':
     js = JokeSelector()
     js.main_menu()
