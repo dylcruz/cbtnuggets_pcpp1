@@ -1,3 +1,4 @@
+
 import requests
 import json
 
@@ -25,9 +26,9 @@ while True:
             elif menu_selection <= len(all_products_json):
                 get_url = 'http://localhost:8000/products/' + all_products_json[menu_selection-1]['name']
                 product_json = requests.get(get_url).json()
-                print(f'\nProduct Name: {product_json['name']}')
-                print(f'Stock: {product_json['stock']}')
-                print(f'Price: {product_json['price']}')
+                print(f'\nProduct Name: {product_json["name"]}')
+                print(f'Stock: {product_json["stock"]}')
+                print(f'Price: {product_json["price"]}')
 
             else:
                 print('Invalid input!')
@@ -81,7 +82,7 @@ while True:
 
             elif menu_selection <= len(all_products_json):
                 product = all_products_json[menu_selection-1]
-                print(f'\nUpdating {product['name']}. Choose a field to update:')
+                print(f'\nUpdating {product["name"]}. Choose a field to update:')
                 menu_selection = int(input('1. Name | 2. Stock | 3. Price | : '))
 
                 if menu_selection == 1:
