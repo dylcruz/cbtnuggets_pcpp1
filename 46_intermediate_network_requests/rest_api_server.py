@@ -51,13 +51,13 @@ class RESTAPIHandler(BaseHTTPRequestHandler):
         request_data = self.rfile.read(content_length)
         product_update_data = json.loads(request_data.decode())
 
-        for i in range(0, len(products)):
-            if products[i]['name'] == product_update_data['name']:
-                products[i][product_update_data['update_value']] = product_update_data['new_value']
-                break
-
-        self.send_response(201)
-        self.end_headers()
+        path_segments = self.path.split('/')
+        if path_segments[1] == 'products':
+            product = next((product for product in products if product['name'] == path_segments[2]))
+            self.send_response(201)
+            self.end_headers()
+            product[product_update_data['update_value']] = product_update_data['new_value']
+            return
 
     def do_DELETE(self):
         path_segments = self.path.split('/')

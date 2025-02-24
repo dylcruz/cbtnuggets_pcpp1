@@ -83,7 +83,7 @@ while True:
             elif menu_selection <= len(all_products_json):
                 product = all_products_json[menu_selection-1]
                 print(f'\nUpdating {product["name"]}. Choose a field to update:')
-                menu_selection = int(input('1. Name | 2. Stock | 3. Price | : '))
+                menu_selection = int(input('1. Name | 2. Stock | 3. Price | 4. Custom | : '))
 
                 if menu_selection == 1:
                     product_new_name = input('Enter a new name for the product: ')
@@ -102,12 +102,19 @@ while True:
                     request_data = {'new_value': product_new_price, 
                                     'name': product['name'], 
                                     'update_value': 'price'}
-                 
+
+                elif menu_selection == 4:
+                    product_new_variable = input('Enter a new variable for the product: ')
+                    new_variable_value = input('Enter a value for the new variable: ')
+                    request_data = {'new_value': new_variable_value, 
+                                    'name': product['name'], 
+                                    'update_value': product_new_variable}
+                    
                 else:
                     print('Invalid Input!')
                     continue
                 
-                response = requests.put('http://localhost:8000/products/',
+                response = requests.put('http://localhost:8000/products/' + request_data['name'],
                                             data=json.dumps(request_data),
                                             headers={'Content-Type': 'application/json'})
                 print('\nProduct updated successfully')
