@@ -17,7 +17,7 @@ print(f'A new client has connected!')
 data = client_socket.recv(1024).decode('utf-8')
 person = json.loads(data)
 
-client_socket.sendall(f"Hello, {person['name'].encode('utf-8')}")
+client_socket.sendall(f"Hello, {person['name']}".encode('utf-8'))
 
 # Do something with the data
 
