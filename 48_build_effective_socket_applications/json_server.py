@@ -1,5 +1,5 @@
 import socket
-import json
+import pickle
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -14,8 +14,8 @@ print('Server is waiting for connections')
 client_socket, client_address = server_socket.accept()
 print(f'A new client has connected!')
 
-data = client_socket.recv(1024).decode('utf-8')
-person = json.loads(data)
+data = client_socket.recv(1024)
+person = pickle.loads(data)
 
 client_socket.sendall(f"Hello, {person['name']}".encode('utf-8'))
 
