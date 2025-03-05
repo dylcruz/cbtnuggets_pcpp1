@@ -10,8 +10,8 @@ def print_element(element):
     print(element.tag)
     if element.text and not element.text.isspace():
         print(element.text)
-    if 'name' in element.attrib:
-        print(element.attrib["name"])
+    for attrib in element.attrib:
+        print(f'{attrib}: {element.attrib[attrib]}')
     for child in element:
         print_element(child)
 
