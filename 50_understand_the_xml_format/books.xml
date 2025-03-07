@@ -1,0 +1,27 @@
+<genres>
+    <genre name="Classics">
+        <book title="The Great Gatsby" author="F. Scott Fitzgerald" price="14.99" />
+        <book title="1984" author="George Orwell" price="9.99" />
+        <book title="To Kill a Mockingbird" author="Harper Lee" price="12.89" />
+    </genre>
+    <science_fiction>
+        <book>
+            <title>Dune</title>
+            <author>Frank Herbert</author>
+            <price>
+                <full_price>15.99</full_price>
+                <sale_price>10.99</sale_price>
+            </price>    
+        </book>
+        <book>
+            <title>The Hitchhikers Guide to the Galaxy</title>
+            <author>Douglas Adams</author>
+            <price>12.00</price>
+        </book>
+        <book>
+            <title>Ender's Game</title>
+            <author>Orson Scott Card</author>
+            <price>14.00</price>
+        </book>
+    </science_fiction>
+</genres>
