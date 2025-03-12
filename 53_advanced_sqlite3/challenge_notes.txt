@@ -1,0 +1,23 @@
+1. Which dept. has the most absences?
+  - SELECT department, COUNT(absence_date) from attendance GROUP BY department ORDER BY COUNT(absence_date) DESC;
+  - ALT: SELECT department, COUNT(*) AS absence_count FROM attendance GROUP BY department ORDER BY absence_count DESC;
+        Sales|4
+        HR|4
+
+2. How many absences in sales from 03-03 to 03-10
+  - SELECT COUNT(absence_date) from attendance WHERE department = 'Sales' AND absence_date BETWEEN '2023-03-03' AND '2023-03-10';
+  - ALT: SELECT * FROM attendance WHERE absence_date BETWEEN '2023-03-03' AND '2023-03-10' AND department = 'Sales';
+        1
+
+3. For each position, how many absences?
+  - SELECT position, COUNT(*) FROM attendance GROUP BY position;
+        Accountant|1
+        Analyst|1
+        Auditor|1
+        Content Writer|1
+        Developer|2
+        HR Manager|1
+        Manager|2
+        Recruiter|3
+        Salesperson|2
+        System Admin|1
