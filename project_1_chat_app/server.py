@@ -14,36 +14,41 @@ class ChatServer:
 
         while True:
             client_socket, addr = self.server_socket.accept()
-            self.clients.append({'id': self.client_id, 'socket': client_socket})
+            client_dict = {'id': self.client_id, 'socket': client_socket}
+            self.clients.append(client_dict)
             self.client_id += 1
             print(f'Client connected from {addr}')
-            thread = threading.Thread(target=self.handle_client, args=(client_socket,))
+            thread = threading.Thread(target=self.handle_client, args=(client_dict,))
             thread.start()
 
     def stop_server(self):
         print('Stopping server.')
 
-    def handle_client(self, client_socket):
+    def handle_client(self, client_dict):
+        client_id = client_dict['id']
+        client_socket = client_dict['socket']
+
         while True:
             try:
-                message_decode = client_socket.recv(1024).decode('UTF-8')                
-                if not message_decode:
+                message_raw = client_socket.recv(1024)                
+                if not message_raw:
                     break
-                message = f'Client {client_id}: {message_decode}'.encode('UTF-8')               
-                self.broadcast_message(message, client_socket)
+                message = message_raw.decode('utf-8')
+                message = f'Client {client_id}: {message}'.encode('UTF-8')               
+                self.broadcast_message(message, client_dict)
                 
             except Exception as e:
                 print(f'Exception: {e}')
                 break
 
-        self.clients.remove(client_socket)
+        self.clients.remove(client_dict)
         client_socket.close()
 
-    def broadcast_message(self, message, source_client):
-        for client in self.clients:
-            if client is not source_client:
+    def broadcast_message(self, message, source_client_dict):
+        for client_dict in self.clients:
+            if client_dict is not source_client_dict:
                 try:
-                    client.send(message)
+                    client_dict['socket'].send(message)
                 except Exception as e:
                     print(f'Exception when broadcasting: {e}')
 
