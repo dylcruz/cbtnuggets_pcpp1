@@ -3,6 +3,7 @@ from tkinter import messagebox
 import requests
 from bs4 import BeautifulSoup
 import csv
+from functools import partial
 
 class ScraperApplicaiton:
     def __init__(self):
@@ -18,24 +19,42 @@ class ScraperApplicaiton:
         self.url_entry.pack()
         Button(self.root, text='Load HTML', command=self.load_html).pack()
 
+        self.fields_frame = Frame(self.root)
+        self.fields_frame.pack()
+
         for i in range(3):
-            frame = Frame(self.root)
-            frame.pack(fill='x', expand=True)
+            self.add_selector()
 
-            name_entry = Entry(frame, width=50)
-            name_entry.pack(side='left', padx=5)
+        add_print_frame = Frame(self.root)
+        add_print_frame.pack()
 
-            selector_entry = Entry(frame, width=50)
-            selector_entry.pack(side='left', padx=5)
-
-            self.selectors.append((name_entry, selector_entry))
-
-        Button(self.root, text='Print Sample', command=self.print_sample).pack()
+        Button(add_print_frame, text='Add Selector', command=self.add_selector).pack(side='left')
+        Button(add_print_frame, text='Print Sample', command=self.print_sample).pack(side='left')
 
         self.file_name_entry = Entry(self.root)
         self.file_name_entry.pack()
         Button(self.root, text='Write to CSV', command=self.write_to_csv).pack()
 
+    def add_selector(self):
+        frame = Frame(self.fields_frame)
+        frame.pack(fill='x', expand=True)
+
+        name_entry = Entry(frame, width=40)
+        name_entry.pack(side='left', padx=5)
+
+        selector_entry = Entry(frame, width=40)
+        selector_entry.pack(side='left', padx=5)
+
+        self.selectors.append((name_entry, selector_entry))
+
+        Button(frame, text='Remove',
+               command=partial(self.remove_selector,frame, (name_entry, selector_entry)),
+               width=10).pack(side='left', padx=5)
+
+    def remove_selector(self, frame, selector_tuple):
+        self.selectors.remove(selector_tuple)
+        frame.destroy()
+        
     def print_sample(self):
         headers, data = self.scrape_data()
         lines = []
